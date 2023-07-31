@@ -1,6 +1,7 @@
 import random
 import math
 import matplotlib.pyplot as plt
+import time
 
 # Función que calcula la distancia entre dos ciudades (puntos) en un plano cartesiano
 def distancia(ciudad1, ciudad2):
@@ -124,8 +125,17 @@ def mutar_poblacion(poblacion, tasa_mutacion):
         poblacion_mutada.append(individuo_mutado)
     return poblacion_mutada
 
+def generar_ciudades(num_ciudades, rango_x=(0, 100), rango_y=(0, 100)):
+    ciudades = []
+    for _ in range(num_ciudades):
+        x = random.uniform(rango_x[0], rango_x[1])
+        y = random.uniform(rango_y[0], rango_y[1])
+        ciudades.append((x, y))
+    return ciudades
+
 # Función que ejecuta el algoritmo genético para encontrar la mejor ruta
 def algoritmo_genetico(lista_ciudades, tamano_poblacion, tamano_elite, tasa_mutacion, generaciones):
+    inicio = time.time()
     poblacion_actual = poblacion_inicial(tamano_poblacion, lista_ciudades)
     mejor_ruta = poblacion_actual[ordenar_rutas(poblacion_actual)[0][0]]
     print("Ruta sin iniciar el algoritmo genético:")
@@ -138,6 +148,9 @@ def algoritmo_genetico(lista_ciudades, tamano_poblacion, tamano_elite, tasa_muta
     print("Mejor ruta encontrada:")
     print(mejor_ruta)
     print("Distancia a recorrer:", 1 / ordenar_rutas(poblacion_actual)[0][1])
+    fin = time.time()
+    tiempo_ejecucion = fin - inicio
+    print("Tiempo de ejecución:", tiempo_ejecucion, "segundos")
     return mejor_ruta
 
 # Función para graficar la ruta inicial y la mejor ruta encontrada
@@ -152,7 +165,7 @@ def graficar_rutas(ruta_inicial, mejor_ruta):
     ax1.legend(loc="upper left")
     ax1.set_xlabel("X")
     ax1.set_ylabel("Y")
-    ax1.set_title("Ruta sin iniciar el algoritmo genético")
+    ax1.set_title(f"Ruta sin iniciar el algoritmo genético\nDistancia: {1 / Aptitud(ruta_inicial).fitness}")
     
     # Graficar la mejor ruta encontrada
     x_coords_best = [ciudad[0] for ciudad in mejor_ruta]
@@ -162,7 +175,7 @@ def graficar_rutas(ruta_inicial, mejor_ruta):
     ax2.legend(loc="upper left")
     ax2.set_xlabel("X")
     ax2.set_ylabel("Y")
-    ax2.set_title("Mejor ruta encontrada")
+    ax2.set_title(f"Mejor ruta encontrada\nDistancia: {1 / Aptitud(mejor_ruta).fitness}")
     
     plt.tight_layout()
     plt.show()
@@ -178,15 +191,11 @@ ciudades = [(0, 0), (1, 3), (4, 2), (3, 6), (7, 2),
             (19, 26), (17, 31), (23, 32), (26, 33), (28, 35),
             (40, 36), (42, 38), (43, 39), (45, 37), (44, 41)]
 
-def generar_ciudades(num_ciudades, rango_x=(0, 100), rango_y=(0, 100)):
-    ciudades = []
-    for _ in range(num_ciudades):
-        x = random.uniform(rango_x[0], rango_x[1])
-        y = random.uniform(rango_y[0], rango_y[1])
-        ciudades.append((x, y))
-    return ciudades
 
-mejor_ruta_encontrada = algoritmo_genetico(ciudades, 100, 20, 0.01, 1000)
-graficar_rutas(ciudades, mejor_ruta_encontrada)
-# mejor_ruta_encontrada = algoritmo_genetico(generar_ciudades(), 100, 20, 0.01, 1000)
-# graficar_rutas(generar_ciudades(), mejor_ruta_encontrada)
+# mejor_ruta_encontrada = algoritmo_genetico(ciudades, 100, 20, 0.01, 1000)
+# graficar_rutas(ciudades, mejor_ruta_encontrada)
+
+num_ciudades = 100
+ciudades_generadas = generar_ciudades(num_ciudades)
+mejor_ruta_encontrada = algoritmo_genetico(ciudades_generadas, 100, 20, 0.01, 1000)
+graficar_rutas(ciudades_generadas, mejor_ruta_encontrada)
