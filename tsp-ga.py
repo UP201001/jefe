@@ -27,7 +27,9 @@ class Aptitud:
 
 # Función que crea una ruta aleatoria a partir de una lista de ciudades
 def crear_ruta(lista_ciudades):
-    return random.sample(lista_ciudades, len(lista_ciudades))
+    ruta = random.sample(lista_ciudades, len(lista_ciudades))
+    ruta.append(ruta[0])  # Agregar la ciudad de inicio al final de la ruta
+    return ruta
 
 # Función que inicializa la población generando un conjunto de rutas aleatorias
 def poblacion_inicial(tamano_poblacion, lista_ciudades):
@@ -88,6 +90,8 @@ def cruzar(padre1, padre2):
 
     hijo.extend(hijo_padre1)
     hijo.extend(hijo_padre2)
+    # Agregar la última ciudad al final de la ruta para asegurar que regrese a la ciudad inicial
+    hijo.append(hijo[0])
     return hijo
 
 # Función que crea la siguiente generación de rutas (nueva población)
@@ -144,7 +148,7 @@ def graficar_rutas(ruta_inicial, mejor_ruta):
     x_coords_init = [ciudad[0] for ciudad in ruta_inicial]
     y_coords_init = [ciudad[1] for ciudad in ruta_inicial]
     ax1.scatter(x_coords_init, y_coords_init, label="Ciudad")
-    ax1.plot(x_coords_init, y_coords_init, label="Ruta")
+    ax1.plot(x_coords_init + [ruta_inicial[0][0]], y_coords_init + [ruta_inicial[0][1]], label="Ruta")  # Agregar la primera ciudad al final para cerrar el ciclo
     ax1.legend(loc="upper left")
     ax1.set_xlabel("X")
     ax1.set_ylabel("Y")
