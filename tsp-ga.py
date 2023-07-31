@@ -178,6 +178,15 @@ ciudades = [(0, 0), (1, 3), (4, 2), (3, 6), (7, 2),
             (19, 26), (17, 31), (23, 32), (26, 33), (28, 35),
             (40, 36), (42, 38), (43, 39), (45, 37), (44, 41)]
 
-mejor_ruta_encontrada = algoritmo_genetico(ciudades, 100, 20, 0.01, 1000)
+def generar_ciudades(num_ciudades, rango_x=(0, 100), rango_y=(0, 100)):
+    ciudades = []
+    for _ in range(num_ciudades):
+        x = random.uniform(rango_x[0], rango_x[1])
+        y = random.uniform(rango_y[0], rango_y[1])
+        ciudades.append((x, y))
+    return ciudades
 
+mejor_ruta_encontrada = algoritmo_genetico(ciudades, 100, 20, 0.01, 1000)
 graficar_rutas(ciudades, mejor_ruta_encontrada)
+# mejor_ruta_encontrada = algoritmo_genetico(generar_ciudades(), 100, 20, 0.01, 1000)
+# graficar_rutas(generar_ciudades(), mejor_ruta_encontrada)
